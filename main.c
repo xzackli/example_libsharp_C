@@ -7,16 +7,11 @@
 #include <libsharp2/sharp_geomhelpers.h>
 #include <libsharp2/sharp.h>
 
-#include "libsharp2/sharp_utils.h"
-#include "libsharp2/sharp_utils.c"
-
-
 typedef double complex dcmplx;  // complex double type
 
 int main()
 {
     int i;
-
     int nside=4;
     int lmax=4;
     double time=0;
@@ -33,16 +28,22 @@ int main()
     ptrdiff_t nalms = sharp_alm_count(alm_info);
     int ncomp = (spin==0) ? 1 : 2;
 
-    // set up maps and alms
+    // set up 2D arrays of maps and alms
     double **map;
-    ALLOC2D(map,double,ncomp,npix);
-    for (i=0; i<ncomp; ++i)
-        SET_ARRAY(map[i],0,(int)npix, 2.0);
+    map = (double **) malloc(ncomp * sizeof(double *));
+    map[0] = (double *) malloc(ncomp * npix * sizeof(double));
+    for (i=1; i<ncomp; ++i)
+        (map)[i]=(map)[i-1]+npix; 
+    for (i=0;i<(int)(npix * ncomp);++i)
+        (map[0])[i]=2.0;  // initialize all components to 2.0
 
     dcmplx **alm;
-    ALLOC2D(alm,dcmplx,ncomp,nalms);
-    for (i=0; i<ncomp; ++i)
-        SET_ARRAY(alm[i],0,(int)nalms, 0.0);
+    alm = (dcmplx **) malloc(ncomp * sizeof(dcmplx *));
+    alm[0] = (dcmplx *) malloc(ncomp * nalms * sizeof(dcmplx));
+    for (i=1; i<ncomp; ++i)
+        (alm)[i]=(alm)[i-1]+nalms; 
+    for (i=0;i<(int)(nalms * ncomp);++i)
+        (alm[0])[i]=0.0;  // we didn't need to do this, but set alms=0
 
     // perform the sht
     sharp_execute(
@@ -52,5 +53,6 @@ int main()
     // print out our nice alms!
     for (i=0; i<nalms; ++i)
         printf("%e + i%e\n", creal(alm[0][i]), cimag(alm[0][i]));
+
     return 0;
 }
