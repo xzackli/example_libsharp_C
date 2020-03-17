@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "/home/zequnl/Installs/include/**"
+                "/home/zequnl/Installs/include/**",
+                "/home/zequnl/Installs/src/libsharp/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "sharp_geomhelpers.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "sharp.h": "c"
     }
 }
