@@ -1,4 +1,4 @@
-# Example Libsharp C Project
+# LibSharp Example (C)
 
 This example code demonstrates how to set up and perform map2alm using LibSharp on a Healpix grid.
 
